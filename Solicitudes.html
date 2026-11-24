@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registro de Solicitudes de Clientes | Entel</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#064cff;--orange:#ff5900;--bg:#f4f6fa}
+*{box-sizing:border-box}body{font-family:Inter,Arial,sans-serif;background:var(--bg);color:#172033}
+.btn{background:var(--blue);color:white;border-radius:10px;padding:10px 16px;font-weight:800;transition:.2s;cursor:pointer;display:inline-flex;align-items:center}
+.btn:hover{background:#003bc7}
+.stat{background:white;border:1px solid #e4e8f0;border-radius:14px;padding:18px}
+.field{border:1px solid #d6dce7;border-radius:9px;padding:9px 12px;background:white;outline:none}
+.field:focus{border-color:var(--blue);box-shadow:0 0 0 3px #064cff18}
+</style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+<div class="bg-[#064cff] text-white text-xs py-2 px-4">
+ <div class="max-w-7xl mx-auto flex justify-between">
+  <span><i class="fa-solid fa-headset mr-2 text-yellow-300"></i><b>Panel de Atención Personalizada</b> · Gestión de Clientes</span>
+  <span>Base de datos local del navegador</span>
+ </div>
+</div>
+
+<header class="bg-white shadow-sm border-b sticky top-0 z-30">
+ <div class="max-w-7xl mx-auto px-4 h-[70px] flex items-center justify-between gap-3">
+  <a href="index.html" class="font-black text-2xl tracking-tight"><span class="text-orange-500 italic">e)</span><span class="text-blue-700">entel</span></a>
+  <div class="flex items-center gap-2">
+   <a href="index.html" class="btn text-xs"><i class="fa-solid fa-arrow-left mr-2"></i>Volver al catálogo</a>
+  </div>
+ </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 py-10 flex-1 w-full">
+ <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+  <div>
+   <p class="text-xs uppercase font-black tracking-widest text-orange-500">Atención personalizada</p>
+   <h1 class="text-2xl md:text-3xl font-black mt-1">Registro de solicitudes de clientes</h1>
+   <p class="text-sm text-gray-500 mt-1">Listado completo con los datos de contacto, equipo y motivo de cada cliente.</p>
+  </div>
+  <div class="flex flex-wrap gap-2">
+   <button type="button" id="btnExportCsv" class="bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg px-4 py-2 text-xs font-extrabold cursor-pointer">
+    <i class="fa-solid fa-file-excel mr-1.5"></i>Descargar Excel (CSV)
+   </button>
+   <button type="button" id="btnClearAll" class="border border-red-200 bg-white text-red-600 rounded-lg px-4 py-2 text-xs font-bold hover:bg-red-50 cursor-pointer">
+    <i class="fa-regular fa-trash-can mr-1.5"></i>Borrar todo
+   </button>
+  </div>
+ </div>
+
+ <!-- TARJETAS DE RESUMEN -->
+ <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+  <div class="stat">
+   <p class="text-xs text-gray-500 font-bold">TOTAL DE CLIENTES REGISTRADOS</p>
+   <p id="statTotal" class="text-3xl font-black mt-2">0</p>
+  </div>
+  <div class="stat">
+   <p class="text-xs text-gray-500 font-bold">PENDIENTES DE ATENCIÓN</p>
+   <p id="statPending" class="text-3xl font-black text-orange-500 mt-2">0</p>
+  </div>
+  <div class="stat">
+   <p class="text-xs text-gray-500 font-bold">ATENDIDAS</p>
+   <p id="statDone" class="text-3xl font-black text-green-600 mt-2">0</p>
+  </div>
+ </div>
+
+ <!-- FILTROS DE BÚSQUEDA -->
+ <div class="bg-white border rounded-t-2xl p-4 flex flex-col sm:flex-row justify-between gap-3">
+  <input id="filterQuery" class="field text-sm sm:w-80" placeholder="Buscar por nombre, DNI, celular o equipo...">
+  <select id="filterStatus" class="field text-sm sm:w-48">
+   <option value="Todos">Todos los estados</option>
+   <option value="Pendiente">Pendiente</option>
+   <option value="Atendida">Atendida</option>
+  </select>
+ </div>
+
+ <!-- TABLA DE DATOS DE CLIENTES -->
+ <div class="bg-white border-x border-b rounded-b-2xl overflow-hidden shadow-sm">
+  <div id="tableContainer" class="overflow-x-auto"></div>
+ </div>
+</main>
+
+<footer class="bg-[#101b35] text-gray-300 py-6 mt-12">
+ <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between gap-2 text-xs">
+  <p><b class="text-white"><span class="text-orange-500">e)</span> entel</b> · Módulo de Solicitudes de Clientes</p>
+  <p>Haz clic en el estado de cada fila para marcarlo como Atendida o Pendiente.</p>
+ </div>
+</footer>
+
+<script>
+const STORAGE_KEY = "entelClientesSolicitudes";
+
+function getRequests() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); }
+  catch (e) { return []; }
+}
+
+function saveRequests(list) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+function renderTable() {
+  const all = getRequests();
+  const pendingCount = all.filter(r => r.status === "Pendiente").length;
+
+  document.getElementById("statTotal").textContent = all.length;
+  document.getElementById("statPending").textContent = pendingCount;
+  document.getElementById("statDone").textContent = all.length - pendingCount;
+
+  const q = (document.getElementById("filterQuery").value || "").toLowerCase();
+  const st = document.getElementById("filterStatus").value;
+
+  const filtered = all.filter(r => {
+    const matchStatus = st === "Todos" || r.status === st;
+    const text = `${r.id} ${r.customer} ${r.dni} ${r.phone} ${r.product} ${r.type}`.toLowerCase();
+    return matchStatus && text.includes(q);
+  });
+
+  const box = document.getElementById("tableContainer");
+
+  if (!all.length) {
+    box.innerHTML = `
+      <div class="p-12 text-center">
+        <p class="text-gray-500 font-semibold">Aún no hay solicitudes de clientes registradas.</p>
+        <a href="index.html" class="btn mt-4 text-xs"><i class="fa-solid fa-plus mr-2"></i>Registrar primera solicitud</a>
+      </div>
+    `;
+    return;
+  }
+
+  if (!filtered.length) {
+    box.innerHTML = '<p class="p-10 text-center text-sm text-gray-400">No hay resultados para ese filtro.</p>';
+    return;
+  }
+
+  box.innerHTML = `
+    <table class="w-full text-left text-xs min-w-[960px]">
+      <thead class="bg-gray-50 text-gray-500 uppercase border-b">
+        <tr>
+          <th class="p-3.5">Ticket / Fecha</th>
+          <th class="p-3.5">Cliente</th>
+          <th class="p-3.5">DNI</th>
+          <th class="p-3.5">Celular</th>
+          <th class="p-3.5">Equipo y Plan</th>
+          <th class="p-3.5">Motivo y Detalle</th>
+          <th class="p-3.5">Estado</th>
+          <th class="p-3.5 text-center">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${filtered.map(r => {
+          const isPending = r.status === "Pendiente";
+          const waMsg = encodeURIComponent(`Hola ${r.customer}, te escribimos de Entel respecto a tu solicitud ${r.id} por el equipo ${r.product}.`);
+          return `
+            <tr class="border-b hover:bg-blue-50/30 transition">
+              <td class="p-3.5">
+                <span class="font-black text-orange-600 block">${escapeHtml(r.id)}</span>
+                <span class="text-gray-400 text-[11px]">${escapeHtml(r.date)}</span>
+              </td>
+              <td class="p-3.5 font-extrabold text-gray-900 text-sm">${escapeHtml(r.customer)}</td>
+              <td class="p-3.5 font-mono text-gray-700">${escapeHtml(r.dni)}</td>
+              <td class="p-3.5 font-semibold text-gray-800">${escapeHtml(r.phone)}</td>
+              <td class="p-3.5">
+                <p class="font-bold text-gray-900">${escapeHtml(r.product)}</p>
+                <p class="text-blue-600 text-[11px] font-semibold mt-0.5">${escapeHtml(r.plan || "Plan postpago")}</p>
+              </td>
+              <td class="p-3.5 max-w-xs">
+                <span class="font-bold text-gray-800">${escapeHtml(r.type)}</span>
+                <p class="text-gray-500 mt-0.5">${escapeHtml(r.notes)}</p>
+              </td>
+              <td class="p-3.5">
+                <button type="button" data-toggle="${escapeHtml(r.id)}" class="px-3 py-1 rounded-full font-extrabold text-[11px] cursor-pointer transition ${isPending ? 'bg-orange-100 text-orange-700 hover:bg-orange-200' : 'bg-green-100 text-green-700 hover:bg-green-200'}" title="Clic para cambiar estado">
+                  <i class="fa-solid ${isPending ? 'fa-clock' : 'fa-circle-check'} mr-1"></i>${escapeHtml(r.status)}
+                </button>
+              </td>
+              <td class="p-3.5 text-center">
+                <div class="inline-flex items-center gap-2">
+                  <a href="https://wa.me/51${escapeHtml(r.phone)}?text=${waMsg}" target="_blank" rel="noopener noreferrer" class="bg-green-500 hover:bg-green-600 text-white px-2.5 py-1.5 rounded-lg font-bold text-[11px]" title="Contactar por WhatsApp">
+                    <i class="fa-brands fa-whatsapp mr-1"></i>Chat
+                  </a>
+                  <button type="button" data-delete="${escapeHtml(r.id)}" class="text-gray-400 hover:text-red-600 p-1.5 cursor-pointer" title="Eliminar registro">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join("")}
+      </tbody>
+    </table>
+  `;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("filterQuery").addEventListener("input", renderTable);
+  document.getElementById("filterStatus").addEventListener("change", renderTable);
+
+  document.getElementById("tableContainer").addEventListener("click", e => {
+    const toggleBtn = e.target.closest("[data-toggle]");
+    if (toggleBtn) {
+      const list = getRequests();
+      const item = list.find(r => r.id === toggleBtn.dataset.toggle);
+      if (item) {
+        item.status = item.status === "Pendiente" ? "Atendida" : "Pendiente";
+        saveRequests(list);
+        renderTable();
+      }
+      return;
+    }
+
+    const delBtn = e.target.closest("[data-delete]");
+    if (delBtn) {
+      if (!confirm("¿Eliminar esta solicitud?")) return;
+      const list = getRequests().filter(r => r.id !== delBtn.dataset.delete);
+      saveRequests(list);
+      renderTable();
+    }
+  });
+
+  document.getElementById("btnClearAll").addEventListener("click", () => {
+    if (!confirm("¿Estás seguro de eliminar TODAS las solicitudes registradas?")) return;
+    localStorage.removeItem(STORAGE_KEY);
+    renderTable();
+  });
+
+  document.getElementById("btnExportCsv").addEventListener("click", () => {
+    const list = getRequests();
+    if (!list.length) { alert("No hay datos para exportar."); return; }
+    const headers = ["Ticket", "Fecha", "Cliente", "DNI", "Celular", "Equipo", "Plan", "Tipo Solicitud", "Detalle", "Estado"];
+    const rows = list.map(r => [r.id, r.date, r.customer, r.dni, r.phone, r.product, r.plan || "", r.type, r.notes, r.status]
+      .map(v => `"${String(v).replace(/"/g, '""')}"`).join(","));
+    const csv = "\uFEFF" + [headers.join(","), ...rows].join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "solicitudes_clientes_entel.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  window.addEventListener("storage", renderTable);
+  renderTable();
+});
+</script>
+</body>
+</html>

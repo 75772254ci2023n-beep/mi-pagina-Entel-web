@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catálogo Postpago | Entel - Atención Personalizada</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#064cff;--navy:#092c78;--orange:#ff5900;--bg:#f4f6fa}
+*{box-sizing:border-box}body{font-family:Inter,Arial,sans-serif;background:var(--bg);color:#172033}
+button,input,select,textarea{font:inherit}
+.btn{background:var(--blue);color:white;border-radius:10px;padding:11px 16px;font-weight:800;transition:.2s;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.btn:hover{background:#003bc7;transform:translateY(-1px)}
+.btn-orange{background:var(--orange);color:white}.btn-orange:hover{background:#e64d00}
+.product{background:#fff;border:1px solid #e1e5ed;border-radius:15px;overflow:hidden;transition:.2s;display:flex;flex-direction:column}
+.product:hover{transform:translateY(-4px);box-shadow:0 12px 28px #12234a12;border-color:#b6c8ff}
+.product-img{height:190px;background:linear-gradient(145deg,#f8faff,#edf2fc);display:flex;align-items:center;justify-content:center;padding:16px}
+.product-img img{height:100%;max-width:100%;object-fit:contain;mix-blend-mode:multiply}
+.tag{font-size:10px;font-weight:800;border-radius:4px;padding:4px 7px}
+.modal{position:fixed;inset:0;background:#101827a8;z-index:60;display:none;align-items:center;justify-content:center;padding:16px;overflow:auto}
+.modal.open{display:flex}
+.panel{background:white;border-radius:18px;width:min(540px,100%);max-height:94vh;overflow:auto;padding:26px;position:relative}
+.field{width:100%;border:1px solid #d6dce7;border-radius:9px;padding:10px 12px;background:white;outline:none}
+.field:focus{border-color:var(--blue);box-shadow:0 0 0 3px #064cff18}
+@media(max-width:640px){.product-img{height:165px}.panel{padding:18px}}
+</style>
+</head>
+<body>
+
+<div class="bg-[#064cff] text-white text-xs py-2 px-4">
+ <div class="max-w-7xl mx-auto flex flex-wrap justify-between gap-2">
+  <span><i class="fa-solid fa-satellite-dish mr-2 text-yellow-300"></i><b>Catálogo Postpago</b> · Atención Personalizada</span>
+  <span><i class="fa-brands fa-whatsapp mr-1"></i> Asesoría y solicitudes · Demo académica</span>
+ </div>
+</div>
+
+<header class="bg-white sticky top-0 z-30 shadow-sm border-b">
+ <div class="max-w-7xl mx-auto px-4 h-[70px] flex items-center justify-between gap-3">
+  <a href="index.html" class="font-black text-2xl tracking-tight"><span class="text-orange-500 italic">e)</span><span class="text-blue-700">entel</span></a>
+  <nav class="hidden md:flex gap-6 text-sm font-bold text-gray-600">
+   <a href="#catalogo" class="hover:text-blue-600">Equipos</a>
+   <a href="#planes" class="hover:text-blue-600">Planes</a>
+  </nav>
+  <div class="flex items-center gap-2">
+   <input id="search" class="field hidden sm:block !w-56 !rounded-full !py-2 text-sm" placeholder="Buscar celular...">
+  </div>
+ </div>
+</header>
+
+<section class="bg-gradient-to-r from-[#082b79] via-[#0754ec] to-[#1684ff] text-white">
+ <div class="max-w-7xl mx-auto px-4 py-10 md:py-14 flex flex-col md:flex-row items-center justify-between gap-8">
+  <div class="max-w-2xl text-center md:text-left">
+   <span class="tag bg-orange-500 text-white">ATENCIÓN PERSONALIZADA · POSTPAGO</span>
+   <h1 class="text-3xl md:text-5xl font-black leading-tight mt-4">Encuentra tu próximo <span class="text-yellow-300">Galaxy o iPhone</span></h1>
+   <p class="text-blue-100 mt-3">Explora nuestros equipos, registra tu solicitud de atención personalizada y un asesor te contactará.</p>
+   <div class="flex flex-wrap gap-3 justify-center md:justify-start mt-6">
+    <button type="button" id="btnOpenGeneralReq" class="bg-orange-500 hover:bg-orange-600 rounded-full px-7 py-3 font-extrabold cursor-pointer">
+     <i class="fa-solid fa-headset mr-2"></i>Registrar solicitud de cliente
+    </button>
+   </div>
+  </div>
+  <div class="bg-white text-gray-900 rounded-2xl p-5 shadow-xl flex gap-4 items-center w-full max-w-sm">
+   <img class="h-28 w-24 object-contain" src="https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?auto=format&fit=crop&w=300&q=80" alt="Celular Samsung">
+   <div>
+    <span class="tag bg-blue-100 text-blue-700">ASESORÍA DIRECTA</span>
+    <p class="font-black mt-2">Cotiza tu equipo ideal</p>
+    <p class="text-xs text-gray-500 mt-1">Renovación, portabilidad o línea nueva</p>
+   </div>
+  </div>
+ </div>
+</section>
+
+<main id="catalogo" class="max-w-7xl mx-auto px-4 py-9">
+ <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+  <div>
+   <p class="text-xs uppercase tracking-widest font-extrabold text-blue-600">Catálogo de equipos</p>
+   <h2 class="text-2xl md:text-3xl font-black mt-1">Elige un celular para solicitar asesoría</h2>
+  </div>
+  <div class="flex flex-wrap gap-2">
+   <select id="brand" class="field !w-auto text-sm">
+    <option value="Todas">Todas las marcas</option><option>Samsung</option><option>Apple</option><option>Xiaomi</option><option>Honor</option><option>Motorola</option>
+   </select>
+   <select id="sort" class="field !w-auto text-sm">
+    <option value="featured">Recomendados</option><option value="low">Menor precio</option><option value="high">Mayor precio</option>
+   </select>
+  </div>
+ </div>
+
+ <div class="flex flex-wrap gap-2 mb-5" id="filters">
+  <button type="button" class="filter btn !py-2 !px-4 text-xs" data-value="Todas">Todos</button>
+  <button type="button" class="filter bg-white border rounded-lg px-4 py-2 text-xs font-bold cursor-pointer" data-value="Samsung">Samsung</button>
+  <button type="button" class="filter bg-white border rounded-lg px-4 py-2 text-xs font-bold cursor-pointer" data-value="Apple">Apple</button>
+  <button type="button" class="filter bg-white border rounded-lg px-4 py-2 text-xs font-bold cursor-pointer" data-value="Xiaomi">Xiaomi</button>
+  <button type="button" class="filter bg-white border rounded-lg px-4 py-2 text-xs font-bold cursor-pointer" data-value="Honor">Honor</button>
+  <button type="button" class="filter bg-white border rounded-lg px-4 py-2 text-xs font-bold cursor-pointer" data-value="Motorola">Motorola</button>
+ </div>
+ <div class="flex justify-between items-center mb-4">
+  <p id="count" class="text-sm font-semibold text-gray-600"></p>
+  <p class="text-xs text-gray-400">Precios referenciales · S/</p>
+ </div>
+ <div id="products" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"></div>
+</main>
+
+<section id="planes" class="bg-white border-y py-12">
+ <div class="max-w-7xl mx-auto px-4">
+  <div class="text-center mb-8">
+   <p class="text-xs font-black tracking-widest text-orange-500">PLANES POSTPAGO</p>
+   <h2 class="text-3xl font-black mt-1">Planes disponibles para tu solicitud</h2>
+   <p class="text-sm text-gray-500 mt-2">Indica el plan de tu preferencia al registrar tu solicitud.</p>
+  </div>
+  <div class="grid md:grid-cols-3 gap-5">
+   <div class="border rounded-2xl p-6">
+    <span class="tag bg-blue-100 text-blue-700">80 GB</span>
+    <h3 class="font-black text-xl mt-3">Power 49.90</h3>
+    <p class="text-3xl font-black text-blue-600 mt-3">S/ 49.90<span class="text-xs text-gray-500 font-medium"> / mes</span></p>
+    <p class="text-sm text-gray-500 mt-3">Internet, llamadas y beneficios incluidos.</p>
+   </div>
+   <div class="border-2 border-orange-400 rounded-2xl p-6 relative">
+    <span class="tag bg-orange-500 text-white">DESTACADO</span>
+    <h3 class="font-black text-xl mt-3">Power Ilim 79.90</h3>
+    <p class="text-3xl font-black text-orange-500 mt-3">S/ 39.95<span class="text-xs text-gray-500 font-medium"> / mes promocional</span></p>
+    <p class="text-sm text-gray-500 mt-3">Plan ilimitado con precio promocional referencial.</p>
+   </div>
+   <div class="border rounded-2xl p-6">
+    <span class="tag bg-blue-100 text-blue-700">ILIMITADO</span>
+    <h3 class="font-black text-xl mt-3">Power Ilim 99.90</h3>
+    <p class="text-3xl font-black text-blue-600 mt-3">S/ 99.90<span class="text-xs text-gray-500 font-medium"> / mes</span></p>
+    <p class="text-sm text-gray-500 mt-3">Internet ilimitado y roaming referencial.</p>
+   </div>
+  </div>
+ </div>
+</section>
+
+<footer class="bg-[#101b35] text-gray-300 py-8">
+ <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between gap-3 text-xs">
+  <p><b class="text-white text-lg"><span class="text-orange-500">e)</span> entel</b><br>Catálogo Postpago · Atención Personalizada</p>
+  <p class="sm:text-right">Precios y planes referenciales.<br>Proyecto académico / demostración.</p>
+ </div>
+</footer>
+
+<!-- MODAL: REGISTRAR SOLICITUD DE CLIENTE -->
+<div id="requestModal" class="modal" role="dialog" aria-modal="true">
+ <div class="panel">
+  <button type="button" id="btnCloseReqX" class="absolute top-4 right-4 text-gray-400 hover:text-gray-900 text-xl cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+  <div id="reqFormView">
+   <p class="text-xs uppercase tracking-widest font-black text-orange-500">Atención personalizada</p>
+   <h2 class="text-2xl font-black mt-1">Registrar solicitud de cliente</h2>
+   <p class="text-xs text-gray-500 mt-1 mb-4">Completa tus datos y un asesor se pondrá en contacto contigo.</p>
+   <div id="reqError" class="hidden bg-red-50 border border-red-200 text-red-700 text-xs font-bold p-3 rounded-lg mb-4"></div>
+   <form id="requestForm" class="space-y-3" novalidate>
+    <div>
+     <label class="text-xs font-bold">Equipo de interés *</label>
+     <select id="reqProductSelect" class="field mt-1"></select>
+    </div>
+    <div>
+     <label class="text-xs font-bold">Nombre completo del cliente *</label>
+     <input id="reqCustomer" class="field mt-1" placeholder="Ej. María Gómez">
+    </div>
+    <div class="grid grid-cols-2 gap-2">
+     <div>
+      <label class="text-xs font-bold">Celular (9 dígitos) *</label>
+      <input id="reqPhone" class="field mt-1" inputmode="numeric" maxlength="9" placeholder="Ej. 987654321">
+     </div>
+     <div>
+      <label class="text-xs font-bold">DNI (8 dígitos) *</label>
+      <input id="reqDni" class="field mt-1" inputmode="numeric" maxlength="8" placeholder="Ej. 71234567">
+     </div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+     <div>
+      <label class="text-xs font-bold">Tipo de solicitud *</label>
+      <select id="reqType" class="field mt-1">
+       <option>Evaluación crediticia / cuotas</option>
+       <option>Portabilidad desde otro operador</option>
+       <option>Renovación de equipo</option>
+       <option>Consulta de stock / promoción</option>
+       <option>Línea nueva postpago</option>
+      </select>
+     </div>
+     <div>
+      <label class="text-xs font-bold">Plan postpago de interés</label>
+      <select id="reqPlan" class="field mt-1">
+       <option>Power 49.90 (80 GB)</option>
+       <option selected>Power Ilim 79.90 (S/ 39.95 promo)</option>
+       <option>Power Ilim 99.90 (Ilimitado)</option>
+       <option>Por definir con asesor</option>
+      </select>
+     </div>
+    </div>
+    <div>
+     <label class="text-xs font-bold">Mensaje o detalle adicional</label>
+     <textarea id="reqNotes" rows="2" class="field mt-1" placeholder="Ej. Horario preferido de llamada o consulta específica..."></textarea>
+    </div>
+    <button id="btnSubmitReq" class="btn btn-orange w-full" type="button"><i class="fa-solid fa-paper-plane mr-2"></i>Enviar solicitud</button>
+    <button type="button" id="btnCancelReq" class="w-full border rounded-lg py-2 text-sm font-bold text-gray-600 cursor-pointer">Cancelar</button>
+   </form>
+  </div>
+
+  <div id="reqSuccess" class="hidden text-center py-6">
+   <div class="w-16 h-16 rounded-full bg-green-100 text-green-600 grid place-items-center text-3xl mx-auto"><i class="fa-solid fa-check"></i></div>
+   <h3 class="text-2xl font-black mt-4">¡Solicitud Registrada!</h3>
+   <p class="text-sm text-gray-500 mt-1">Código de atención: <b id="reqTicketId" class="text-blue-600"></b></p>
+   <p class="text-xs text-gray-500 mt-2">Hemos registrado tu consulta. Un asesor se comunicará contigo a la brevedad.</p>
+   <button type="button" id="btnDoneReq" class="btn mt-6 w-full">Listo</button>
+  </div>
+ </div>
+</div>
+
+<script>
+const products = [
+  {id:1,brand:"Samsung",name:"Galaxy A27 128GB 5G + Parlante Trek",price:1100,old:1299,tag:"15% dto. · Incluye parlante",specs:"128GB · 5G · Cámara triple · 6GB RAM",gift:"Parlante Trek",img:"https://miportal.entel.pe/static/100120260939454/images/Samsung_Galaxy_A27_128GB_5G_Black_+_Maxell_Promo_Parlante_Trek_Negro_Img1_276x549.jpg"},
+  {id:2,brand:"Samsung",name:"Galaxy A27 128GB 5G + MaxPods MX2",price:1100,old:1299,tag:"15% dto. · Incluye audífonos",specs:"128GB · 5G · Pantalla AMOLED",gift:"Audífonos MaxPods MX2",img:"https://miportal.entel.pe/static/100120260939454/images/Samsung_Galaxy_A27_128GB_5G_Black_+_Maxell_Maxpods_Mx2_Headphone_Negro_Img1_276x549.jpg"},
+  {id:3,brand:"Samsung",name:"Galaxy A27 128GB 5G",price:1100,old:1299,tag:"15% dto.",specs:"128GB · 5G · Cámara 50MP · 6GB RAM",gift:"Sin accesorio",img:"https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTyeIIW67QWWK65KOS9W2nICRiVL7XajPEPTRtVauX4Xro5NhxMCZyO7dexecymtrk-NuEqXpGfsSGMEXwamuaW5nH84SJJGvv9bwrHWPaZ-k_szQHQw6MomMWRAPwSHNv4XxLrVM4&usqp=CAc"},
+  {id:4,brand:"Samsung",name:"Galaxy S25 Ultra 256GB 5G",price:3699,old:4359,tag:"Oferta especial",specs:"256GB · 5G · S Pen · Cámara avanzada",gift:"Sin accesorio",img:"https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQ0nfRlKMd24KNAji_MCwLHcmzzaWy8zKtuPOgBbSegQC2LQp6G0XfibPwuD33unGSanO2MhGP-cKyT2k68yHvCOEBbrulFKIcyyuQizi63TaaNr91Yq8Q1obdr6N-lm8O4JWRcguh_Eg&usqp=CAc"},
+  {id:5,brand:"Samsung",name:"Galaxy S25 256GB 5G",price:2799,old:3299,tag:"Precio especial",specs:"256GB · 5G · AMOLED · 12GB RAM",gift:"Sin accesorio",img:"https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQUf7ZJFnM-eQjoG4tXfIJd16C2AeQFrByIuAWPh92Y9ECf5QYqxERlHQrjZUFFAlf4VrqUzX2044_qvySMF6y_JhvzlRxT5KGhnSI3uOSQwn1lTcd0VypuU5fM2BbNMbxxgewHphY&usqp=CAc"},
+  {id:6,brand:"Samsung",name:"Galaxy A56 256GB 5G",price:1599,old:1889,tag:"15% dto.",specs:"256GB · 5G · 5000mAh · 8GB RAM",gift:"Sin accesorio",img:"https://tienda.movistar.com.pe/media/catalog/product/cache/07b60579cf7aa09974599885aacbcf02/t/m/tmgpesaa5662gfs001_340x600_back.png"},
+  {id:7,brand:"Samsung",name:"Galaxy A36 128GB 5G",price:1199,old:1399,tag:"Oferta",specs:"128GB · 5G · Super AMOLED",gift:"Sin accesorio",img:"https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQx8OJot8HYmcRZAPR2LXmQgdpp6tWx5MjPdh3SiF09i3UooAdjy_XQBX7stHjYyXYsSqNmzOvXDls-r03Tm9AbUCLbyn-qXEtitxQAWdCFThBp0iHvZ7p76c0mDL_K5y1FwKNLLQ&usqp=CAc"},
+  {id:8,brand:"Samsung",name:"Galaxy A16 128GB 4G",price:599,old:699,tag:"Ahorra hoy",specs:"128GB · 4G · Pantalla 6.7 pulgadas",gift:"Sin accesorio",img:"https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcT9cYc1slEuKGrqFwCeaKLJwL6IZcNzL_C38kgmNzFUjgmIMsPEeSU9F-uifZlgTb4eWTgU8a3z8p-k6ScTVghsmHaXuy22GeXu4KtmGIkAcRL-fj5mdrpCASwbK1AyB2i874YpqvY&usqp=CAc"},
+  {id:9,brand:"Apple",name:"iPhone 16 128GB 5G",price:3299,old:3749,tag:"Apple · Oferta",specs:"128GB · 5G · Chip A18",gift:"Sin accesorio",img:"https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcTh6kh2zgB8F0zxHu11oSYdfmVAk5QwZuQYnoaKi9ABtpKr7aBbz4ABpED1yynJFXDVzc-zXePwAfMYt2nkTn0jfKP0xLuUMIIutFFs3HOxTbypXBwdlohu8wY6ekyAMzXdxcHZ1w&usqp=CAc"},
+  {id:10,brand:"Apple",name:"iPhone 16 Pro 256GB",price:4899,old:5399,tag:"Premium",specs:"256GB · 5G · Cámara Pro",gift:"Sin accesorio",img:"https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcRoDG76ykGOKCBGtKHvptAxq-4HxyuqVdnnvBzI8qvkmyDzp-wTqPCQcQwMTMwCD7Idmv96dc9nof4Ml6fEBVTjdFB1k67H4jQzGE__aCy7lA7jAFOiJVg__ebNvjFj0RlODHwxEyQ&usqp=CAc"},
+  {id:11,brand:"Apple",name:"iPhone 15 128GB",price:2699,old:3099,tag:"Precio especial",specs:"128GB · 5G · Cámara dual",gift:"Sin accesorio",img:"https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcTgzlU217GOW5Px3ztjBeXv6SxIU6dyB1Owkg35fsdBPjkqlJWd_O4rUN-d9zqqFvQn0MqjxLmYhQXUH2BJa88Fuh70--2-JJH6u-8MIZtJ22NXxFJfasG2O4vsSNgONPhbiz3LXQ&usqp=CAc"},
+  {id:12,brand:"Xiaomi",name:"Redmi Note 14 Pro 256GB",price:1199,old:1399,tag:"Cámara 200MP",specs:"256GB · 5G · Cámara 200MP",gift:"Sin accesorio",img:"https://promart.vteximg.com.br/arquivos/ids/9329003/imageUrl_1.jpg?v=638933420656430000"},
+  {id:13,brand:"Xiaomi",name:"Xiaomi 14T 256GB 5G",price:1899,old:2260,tag:"Oferta",specs:"256GB · 5G · Óptica Leica",gift:"Sin accesorio",img:"https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcRbg21vGSRF9YjzjxhXHWvEk-TpYyeXhfg0sB3o1Y4zpCM54cTQ9SUCSgIIcC7Wmoc63rEWEPoNoI7N_DkRDYp9sbkTkYSd3_o_M3x7Uwl5aRS0GHpgtG89SjbbtsDj3LpmJRFpqYY&usqp=CAc"},
+  {id:14,brand:"Honor",name:"Honor Magic 7 Lite 256GB",price:1290,old:1519,tag:"Batería de larga duración",specs:"256GB · Cámara 108MP · Gran batería",gift:"Sin accesorio",img:"https://tienda.movistar.com.pe/media/catalog/product/cache/07b60579cf7aa09974599885aacbcf02/t/m/tmgpehnmgc7lnes001_260x310_catalog.png"},
+  {id:15,brand:"Honor",name:"Honor X8b 256GB",price:899,old:999,tag:"Oferta",specs:"256GB · Cámara 108MP · 8GB RAM",gift:"Sin accesorio",img:"https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcREvLUMKegQ_cCc9NnnHnvGV6hCOoH9H7Efmr0RPo2LxHfKn-ED7CFlswhkz0QbzV3vl2sEfVp14SSbTcve7YLG8rvBHYYCUmo991k-K1SaE2g0Z-jogWYovoPPM8o5MKvhYobUcX91Iw&usqp=CAc"},
+  {id:16,brand:"Motorola",name:"Moto Edge 50 Fusion 256GB",price:1150,old:1350,tag:"Carga rápida",specs:"256GB · 5G · Pantalla pOLED",gift:"Sin accesorio",img:"https://tienda.movistar.com.pe/media/catalog/product/cache/07b60579cf7aa09974599885aacbcf02/t/m/tmgpemoed50fves001_260x310_catalog.png"},
+  {id:17,brand:"Motorola",name:"Moto G85 256GB 5G",price:999,old:1199,tag:"Buen rendimiento",specs:"256GB · 5G · Pantalla pOLED",gift:"Sin accesorio",img:"https://http2.mlstatic.com/D_NQ_NP_699809-MLA99461747028_112025-O.webp"}
+];
+
+const STORAGE_KEY = "entelClientesSolicitudes";
+let activeBrand = "Todas";
+
+function getRequests() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); }
+  catch (e) { return []; }
+}
+
+function saveRequests(list) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+}
+
+function money(n) {
+  return "S/ " + Number(n).toLocaleString("es-PE", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+function showMsg(text) {
+  const el = document.getElementById("reqError");
+  if (!text) { el.classList.add("hidden"); el.textContent = ""; return; }
+  el.textContent = text;
+  el.classList.remove("hidden");
+}
+
+function renderProducts() {
+  const q = (document.getElementById("search").value || "").toLowerCase();
+  const brand = document.getElementById("brand").value;
+  let list = products.filter(p =>
+    (brand === "Todas" || p.brand === brand) &&
+    (activeBrand === "Todas" || p.brand === activeBrand) &&
+    (p.name + " " + p.brand).toLowerCase().includes(q)
+  );
+  const sort = document.getElementById("sort").value;
+  if (sort === "low") list.sort((a, b) => a.price - b.price);
+  if (sort === "high") list.sort((a, b) => b.price - a.price);
+
+  document.getElementById("count").textContent = `${list.length} equipos disponibles en el catálogo`;
+  const grid = document.getElementById("products");
+
+  if (!list.length) {
+    grid.innerHTML = '<div class="col-span-full bg-white rounded-xl p-10 text-center text-gray-500">No encontramos equipos con esos filtros.</div>';
+    return;
+  }
+
+  grid.innerHTML = list.map(p => `
+    <article class="product">
+      <div class="p-3 flex justify-between items-center">
+        <span class="tag bg-blue-600 text-white">5G</span>
+        <span class="text-xs text-gray-500"><i class="fa-solid fa-headset text-orange-500 mr-1"></i>Asesoría</span>
+      </div>
+      <div class="product-img"><img src="${p.img}" alt="${p.name}" loading="lazy"></div>
+      <div class="p-4 flex-1">
+        <p class="text-xs text-gray-500">${p.brand}</p>
+        <h3 class="font-extrabold leading-snug mt-1 min-h-[44px]">${p.name}</h3>
+        <div class="mt-2"><span class="tag bg-blue-600 text-white">${p.tag}</span></div>
+        <p class="text-3xl font-black text-blue-600 mt-3">${money(p.price)}</p>
+        <p class="text-xs text-gray-500">Hasta 18 cuotas · Precio normal <s>${money(p.old)}</s></p>
+        <p class="text-xs text-gray-500 mt-2">${p.specs}</p>
+        <p class="text-xs text-gray-600 mt-2"><i class="fa-solid fa-gift text-orange-500 mr-1"></i>${p.gift}</p>
+      </div>
+      <div class="p-4 pt-0">
+        <button type="button" data-req="${p.id}" class="btn btn-orange w-full">
+          <i class="fa-solid fa-headset mr-2"></i>Solicitar atención
+        </button>
+      </div>
+    </article>
+  `).join("");
+}
+
+function openRequest(productId) {
+  const sel = document.getElementById("reqProductSelect");
+  sel.innerHTML = '<option value="Consulta general / Sin equipo específico">Consulta general / Sin equipo específico</option>' +
+    products.map(p => `<option value="${escapeHtml(p.name)}">${escapeHtml(p.name)} (${money(p.price)})</option>`).join("");
+  document.getElementById("requestForm").reset();
+  showMsg("");
+  if (productId) {
+    const prod = products.find(p => p.id === Number(productId));
+    if (prod) sel.value = prod.name;
+  }
+  document.getElementById("reqFormView").classList.remove("hidden");
+  document.getElementById("reqSuccess").classList.add("hidden");
+  document.getElementById("requestModal").classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+
+function closeRequest() {
+  document.getElementById("requestModal").classList.remove("open");
+  document.body.style.overflow = "";
+}
+
+function handleSaveRequest() {
+  const customer = document.getElementById("reqCustomer").value.trim();
+  const phone = document.getElementById("reqPhone").value.trim();
+  const dni = document.getElementById("reqDni").value.trim();
+
+  if (customer.length < 3) { showMsg("Por favor ingresa tu nombre completo."); return; }
+  if (!/^\d{9}$/.test(phone)) { showMsg("El celular debe tener exactamente 9 números."); return; }
+  if (!/^\d{8}$/.test(dni)) { showMsg("El DNI debe tener exactamente 8 números."); return; }
+
+  showMsg("");
+  const req = {
+    id: "SOL-" + Date.now().toString().slice(-6),
+    date: new Date().toLocaleString("es-PE"),
+    product: document.getElementById("reqProductSelect").value,
+    customer,
+    phone,
+    dni,
+    type: document.getElementById("reqType").value,
+    plan: document.getElementById("reqPlan").value,
+    notes: document.getElementById("reqNotes").value.trim() || "Sin comentarios adicionales",
+    status: "Pendiente"
+  };
+
+  const list = getRequests();
+  list.unshift(req);
+  saveRequests(list);
+
+  document.getElementById("reqTicketId").textContent = req.id;
+  document.getElementById("reqFormView").classList.add("hidden");
+  document.getElementById("reqSuccess").classList.remove("hidden");
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  ["reqPhone", "reqDni"].forEach(id => {
+    const el = document.getElementById(id);
+    el.addEventListener("input", () => { el.value = el.value.replace(/\D/g, ""); });
+  });
+
+  document.getElementById("search").addEventListener("input", renderProducts);
+  document.getElementById("brand").addEventListener("change", renderProducts);
+  document.getElementById("sort").addEventListener("change", renderProducts);
+
+  document.getElementById("filters").addEventListener("click", e => {
+    const btn = e.target.closest(".filter");
+    if (!btn) return;
+    activeBrand = btn.dataset.value;
+    document.getElementById("brand").value = activeBrand;
+    document.querySelectorAll(".filter").forEach(b => {
+      const on = b.dataset.value === activeBrand;
+      b.className = on ? "filter btn !py-2 !px-4 text-xs" : "filter bg-white border rounded-lg px-4 py-2 text-xs font-bold cursor-pointer";
+    });
+    renderProducts();
+  });
+
+  document.getElementById("products").addEventListener("click", e => {
+    const reqBtn = e.target.closest("[data-req]");
+    if (reqBtn) openRequest(reqBtn.dataset.req);
+  });
+
+  document.getElementById("btnOpenGeneralReq").addEventListener("click", () => openRequest(null));
+  document.getElementById("btnSubmitReq").addEventListener("click", handleSaveRequest);
+  document.getElementById("requestForm").addEventListener("submit", e => { e.preventDefault(); handleSaveRequest(); });
+  document.getElementById("btnCloseReqX").addEventListener("click", closeRequest);
+  document.getElementById("btnCancelReq").addEventListener("click", closeRequest);
+  document.getElementById("btnDoneReq").addEventListener("click", closeRequest);
+  document.getElementById("requestModal").addEventListener("click", e => { if (e.target.id === "requestModal") closeRequest(); });
+
+  renderProducts();
+});
+</script>
+
+<a href="https://wa.me/51904037879?text=Hola%2C%20quisiera%20informaci%C3%B3n%20sobre%20los%20equipos%20del%20cat%C3%A1logo%20Postpago" target="_blank" rel="noopener noreferrer" aria-label="Consultar por WhatsApp" title="Consultar por WhatsApp" style="position:fixed;right:22px;bottom:22px;z-index:80;width:60px;height:60px;border-radius:50%;background:#25D366;color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(0,0,0,.22);font-size:32px;text-decoration:none;transition:transform .2s" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
+ <i class="fa-brands fa-whatsapp"></i>
+</a>
+
+</body>
+</html>
